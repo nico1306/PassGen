@@ -1,10 +1,12 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace PassGen
-{ 
+{
 
     public partial class PassGen : Form
     {
+
         public PassGen()
         {
             InitializeComponent();
@@ -15,11 +17,35 @@ namespace PassGen
             string pw = CreateRandomPassword();
 
             //Checks if the create method was faulty
-            if(pw != "")
+            if (pw != "")
             {
                 pwd.Text = pw;
                 Clipboard.SetText(pw);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string pw = pwd.Text;
+            string strangeletters = "!§$%&/()=?_:;><|+#{}";
+            //Time to redirect to Password box
+            Thread.Sleep(2000);
+            foreach (char c in pw)
+            {
+                if (strangeletters.Contains(c.ToString()))
+                {
+                    writeKey("{" + c.ToString() + "}");
+                }
+                else
+                {
+                    writeKey(c.ToString());
+                }
+            }
+        }
+
+        void writeKey(string key)
+        {
+            SendKeys.SendWait(key);
         }
 
         private string CreateRandomPassword()
